@@ -1,6 +1,8 @@
 # Aleno Pricing
 NodeJS + ReactJS application that converts the content of a pricing CSV file into responsive tables
 
+**You can find client app in client/ directory**
+
 A few things to note in the project:
 * **[Github Actions Workflows](https://github.com/fadinasr/aleno_pricing/tree/master/.github/workflows)** - Pre-configured Github Actions to run automated builds and publish image to Github Packages
 * **[Dockerfile](https://github.com/fadinasr/aleno_pricing/blob/master/Dockerfile)** - Dockerfile to generate docker builds.
@@ -114,6 +116,9 @@ The application uses [winston](https://github.com/winstonjs/winston) as the defa
 |   +-- controllers
 |   |   +-- GetAllController
 |   |   |   +-- index.ts
+|   |   +-- UploadController
+|   |   |   +-- data.csv
+|   |   |   +-- index.ts
 |   +-- errors
 |   |   +-- application-error.ts
 |   |   +-- bad-request.ts
@@ -123,7 +128,8 @@ The application uses [winston](https://github.com/winstonjs/winston) as the defa
 |   |   |   +-- winston-transport.ts
 |   |   +-- safe-mongo-connection.ts
 |   +-- middleware
-|   |   +-- request-middleware.ts
+|   |   +-- upload
+|   |   |   +-- index.ts
 |   +-- models
 |   |   +-- plugins
 |   |   |   +-- timestamp-plugin.ts
@@ -133,6 +139,15 @@ The application uses [winston](https://github.com/winstonjs/winston) as the defa
 |   +-- mongo-connection.ts
 |   +-- routes.ts
 |   +-- server.ts
++-- client
+|   +-- package-lock.json
+|   +-- package.json
+|   +-- README.md
+|   +-- tsconfig.json
+|   +-- src
+|   |   +-- components
+|   |   |   +-- table
+|   |   |   +-- uploadFile
 +-- .env.default
 +-- .eslintrc.json
 +-- .gitignore
