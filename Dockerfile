@@ -15,6 +15,6 @@ COPY openapi.json ./openapi.json
 RUN npm run build
 
 # Expose port 3000
-EXPOSE 3000
+EXPOSE 3030
 
 CMD npm run start

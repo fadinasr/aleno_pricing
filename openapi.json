@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/"
+      "url": "http://localhost:3030/"
     }
   ],
   "tags": [
@@ -21,10 +21,143 @@
     }
   ],
   "paths": {
-
+    "/api/all": {
+      "get": {
+        "tags": [
+          "Pricing Items"
+        ],
+        "summary": "Get all Pricing Items parsed from CSV file into the database",
+        "parameters": [],
+        "operationId": "pricing-all",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PricingItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/uploads/csv": {
+      "post": {
+        "tags": [
+          "Pricing file"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "base64"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "contentType": "text/csv"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Upload a CSV file to fill-up the Database",
+        "operationId": "pricing-upload",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Uploaded Successfully!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "items": {
+                        "$ref": "#/components/schemas/Error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
+      "PricingItem": {
+        "type": "object",
+        "properties": {
+          "tiers": {
+            "type": "string",
+            "example": "Create your own reports"
+          },
+          "starter": {
+            "type": "string",
+            "example": "3"
+          },
+          "advanced": {
+            "type": "string",
+            "example": "10"
+          },
+          "enterprise": {
+            "type": "string",
+            "example": "15"
+          },
+          "_id": {
+            "type": "string",
+            "example": "5d7224d3b40b1a1a046697dd"
+          }
+        }
+      },
       "Error": {
         "type": "object",
         "properties": {
