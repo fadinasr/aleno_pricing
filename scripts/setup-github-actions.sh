@@ -3,7 +3,7 @@
 
 project_name="swenson-presso"
 filename=".github/workflows/latest.yml"
-default_repo="fadinasr/swenson-presso"
+default_repo="fadinasr/aleno-pricing"
 
 configure_github_actions() {
   read -p "Enter your Github username: "  github_user
