@@ -1,4 +1,5 @@
-import mongoose, { ConnectionOptions } from 'mongoose';
+import mongoose from 'mongoose';
+import logger from '../logger';
 
 /** Callback for establishing or re-stablishing mongo connection */
 interface IOnConnectedCallback {
@@ -7,7 +8,7 @@ interface IOnConnectedCallback {
 
 interface SafeMongooseConnectionOptions {
   mongoUrl: string;
-  mongooseConnectionOptions?: ConnectionOptions;
+  mongooseConnectionOptions?: any;
   retryDelayMs?: number
   debugCallback?: (collectionName: string, method: string, query: any, doc: string) => void;
   onStartConnection?: (mongoUrl: string) => void;
@@ -15,10 +16,8 @@ interface SafeMongooseConnectionOptions {
   onConnectionRetry?: (mongoUrl: string) => void;
 }
 
-const defaultMongooseConnectionOptions: ConnectionOptions = {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true
+const defaultMongooseConnectionOptions: any = {
+  
 };
 
 /**
@@ -48,7 +47,7 @@ export default class SafeMongooseConnection {
   private retryDelayMs: number = 2000;
 
   /** Mongo connection options to be passed Mongoose */
-  private readonly mongoConnectionOptions: ConnectionOptions = defaultMongooseConnectionOptions;
+  private readonly mongoConnectionOptions: any = defaultMongooseConnectionOptions;
 
   private connectionTimeout: NodeJS.Timeout;
 
@@ -87,11 +86,15 @@ export default class SafeMongooseConnection {
     this.startConnection();
   }
 
-  private startConnection = () => {
+  private startConnection = async () => {
     if (this.options.onStartConnection) {
       this.options.onStartConnection(this.options.mongoUrl);
     }
-    mongoose.connect(this.options.mongoUrl, this.mongoConnectionOptions).catch(() => { });
+    try {
+      await mongoose.connect(this.options.mongoUrl, this.mongoConnectionOptions)
+    } catch (err) {
+      logger.error(err)
+    }
   }
 
   /**

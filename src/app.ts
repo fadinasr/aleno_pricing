@@ -5,6 +5,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import ApplicationError from './errors/application-error';
 import routes from './routes';
 import logger from './logger';
+// import cors from 'cors';
 
 const app = express();
 
@@ -27,13 +28,22 @@ function logResponseTime(req: Request, res: Response, next: NextFunction) {
 
 app.use(logResponseTime);
 
-app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/uploads', express.static( "./uploads"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(compression());
+
+// let corsOptions = {
+//   origin: "http://localhost:3030"
+// };
+// app.use(cors(corsOptions));
 
 app.use('/api', routes);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+});
 
 app.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
